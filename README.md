@@ -1,5 +1,5 @@
 # Maximizing Airline Revenue: A Systematic Approach
-> 3andek chi company dial tyarat? Bghiti tdir revenue? Weli m3ana f **Hilolo Airlines Simulator** — hada l’code dial Hilolo, li z3ma fakkar f seating optimization w nsaa l’user. W ana vein mrid f rasi hh
+> 3andek chi company dial tyarat? Bghiti tdir revenue? Weli m3ana f **Hilolo Airlines Simulator** — hada l'code dial Hilolo, li z3ma fakkar f seating optimization w nsaa l'user. W ana vein mrid f rasi hh
 
 ![Airplane Seating Chart Meme](https://images2.memedroid.com/images/UPLOADED54/52f66fe589464.jpeg)
 
@@ -11,6 +11,7 @@ This application optimizes airline seating arrangements to maximize revenue whil
 *   Window seat preference handling has been added.
 *   Input parsing is more robust.
 *   Unit and integration tests have been added.
+*   **Refactored:** The core `SeatingAllocator` logic has been refactored to improve efficiency and robustness, replacing the previous iterative row-by-row placement attempt with a strategy that evaluates available blocks across the entire plane for each group.
 *   **Limitation:** The family seating rule ensures children are adjacent to adults within their assigned block but assumes sequential placement based on input order and does not explicitly handle aisle separation.
 *   **Limitation:** The allocation loop prioritizes revenue but might be inefficient in scenarios where large, high-revenue groups cannot fit until later rows.
 
@@ -47,10 +48,13 @@ The parser handles malformed lines, empty lines, and file errors gracefully by s
 Boarding groups (individuals and families) are placed into a `PriorityQueue` using `BoardingGroupComparator`. This ensures groups with higher revenue per seat are processed first. If revenue per seat is equal, smaller groups (requiring fewer seats) are prioritized.
 
 ### 3. Dynamic Seating Strategy
-The `SeatingAllocator` iterates through the priority queue, attempting to place each group:
-*   It searches for the first available contiguous block of seats large enough for the group, starting from the current position.
-*   **Window Preference**: If any passenger in the group specified `Yes` for `WindowPref`, the allocator first tries to find an available block that includes a window seat (the first or last seat in the row). If no suitable window block is found, it will place the group in the first available non-window block as a fallback.
-*   **Family Handling**: Families are always seated together in a contiguous block. If a family includes children (`Type=Child`), the placement is only considered valid if every child has an adult from the same family seated immediately to their left or right within the assigned block. (See limitations above regarding aisles/placement order).
+The `SeatingAllocator` processes the prioritized boarding groups:
+*   It maintains a dynamic list of available contiguous seat blocks for each row.
+*   For each group from the priority queue, it searches across *all* available blocks in *all* rows to find potential valid placements.
+*   A placement is considered valid if the block is large enough and satisfies family placement rules (see below).
+*   **Window Preference**: The allocator prioritizes placing groups wanting a window seat into a block that includes a window (first or last seat of the row). If multiple preferred blocks are found, the first one encountered is typically chosen. If no preferred block is available, it will select the first available valid non-window block as a fallback.
+*   **Family Handling**: Families are always seated together in a contiguous block. The `IsFamilyPlacementValid` check ensures that if a family includes children (`Type=Child`), every child has an adult from the same family seated immediately to their left or right *within the assigned block* (based on the sequential order of members in the family list). (See limitations above regarding aisles).
+*   Once a group is placed, the list of available blocks is updated, and the group's revenue is added to the total.
 
 ### 4. Output
 After allocation, the program prints:
@@ -131,7 +135,6 @@ docker rm sao-run
 
 *   **Performance Validation:** Test with significantly larger input datasets.
 *   **Advanced Family Rules:** Implement more sophisticated family seating logic (e.g., aisle awareness, placement permutations).
-*   **Allocation Loop Refinement:** Investigate and potentially refactor the main `AllocateSeats` loop for better efficiency in certain edge cases.
 *   **Configurable Input Path:** Allow the input file path to be specified via command line.
 *   **Logging:** Implement a more formal logging framework instead of `Console.WriteLine`.
 
