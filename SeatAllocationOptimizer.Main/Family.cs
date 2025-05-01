@@ -28,6 +28,6 @@ namespace SeatAllocationOptimizer.Main
             }
         }
 
-        // TODO: Add methods for adding members, etc., as needed.
+        // Basic family structure with member addition and calculated properties.
     }
 } 

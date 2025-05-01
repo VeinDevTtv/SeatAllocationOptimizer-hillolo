@@ -123,7 +123,7 @@ docker rm sao-run
 *   The solution can be opened in Visual Studio or VS Code.
 *   Unit and integration tests are located in the `SeatAllocationOptimizer.Test` project.
 *   Run tests using the Visual Studio Test Explorer or via the command line:
-    ```bash
+```bash
     dotnet test
     ```
 

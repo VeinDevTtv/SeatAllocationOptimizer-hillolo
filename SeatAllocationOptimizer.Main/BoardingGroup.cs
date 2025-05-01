@@ -30,6 +30,6 @@ namespace SeatAllocationOptimizer.Main
             GroupId = family.FamilyId;
         }
 
-        // TODO: Consider if any other methods are needed.
+        // This class effectively wraps Passengers and Families for the allocation process.
     }
 } 

@@ -17,7 +17,6 @@ namespace SeatAllocationOptimizer.Main
             WantsWindowSeat = wantsWindow;
         }
 
-        // TODO: Add constructor(s) and potentially methods mentioned or implied in README
-        // For example, parsing from input might be a static factory method or constructor logic.
+        // Constructor logic handled by DataParser.
     }
 } 

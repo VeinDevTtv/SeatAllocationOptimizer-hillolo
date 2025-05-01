@@ -43,9 +43,8 @@ public class MainClass
 
         // --- New Logic using SeatAllocationOptimizer.Main classes ---
 
-        // 1. Parse Input Data (using placeholder logic for now)
-        // TODO: Update DataParser.ParseInput to read "Data/input.txt" properly
-        string inputFile = "Data/input.txt";
+        // 1. Parse Input Data
+        string inputFile = "Data/input.txt"; // Input file path
         List<BoardingGroup> boardingGroups = DataParser.ParseInput(inputFile);
 
         // 2. Configure and run the Allocator
