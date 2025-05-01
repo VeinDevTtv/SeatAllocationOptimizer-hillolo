@@ -7,6 +7,7 @@ namespace SeatAllocationOptimizer.Main
         public Passenger? IndividualPassenger { get; private set; }
         public Family? FamilyGroup { get; private set; }
         public string GroupId { get; private set; }
+        public string DisplayId => GroupId;
 
         public bool IsFamily => FamilyGroup != null;
 

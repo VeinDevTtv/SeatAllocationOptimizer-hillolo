@@ -173,5 +173,31 @@ namespace SeatAllocationOptimizer.Tests
             Assert.AreEqual(100, result.SeatMap[0, 0]?.GroupRevenue); // P1 seated
         }
 
+        [TestMethod]
+        public void AllocateSeats_FamilyPlacement_InvalidChildAdjacency_Unseated()
+        {
+            // Scenario: Plane 1x3. Family [C, A, C] revenue 200. Individual P revenue 10.
+            // Comparator selects Family first.
+            // Only block is [0,0] size 3. IsFamilyPlacementValid should fail for [C, A, C] in this block.
+            // Family should be unseated. Individual P should be seated.
+            var allocator = new SeatingAllocator(planeRows: 1, seatsPerRow: 3);
+            var familyCAC = F("CAC", P(false, 50), P(true, 100), P(false, 50)); // C, A, C (Total Revenue 200)
+            var individualP = P(true, 10); // Low revenue individual
+            var groups = new List<BoardingGroup>() {
+                new BoardingGroup(familyCAC),
+                new BoardingGroup(individualP)
+            };
+
+            var result = allocator.AllocateSeats(groups);
+
+            // Assertions:
+            Assert.AreEqual(10, result.TotalRevenue, "Only the individual should be seated.");
+            Assert.AreEqual(1, result.UnseatedGroups.Count, "The family should be unseated.");
+            Assert.AreEqual(familyCAC.FamilyId, result.UnseatedGroups[0].GroupId, "Unseated group should be the family.");
+            Assert.AreEqual(individualP.Revenue, result.SeatMap[0, 0]?.GroupRevenue, "Individual should be in the first seat.");
+            Assert.IsNull(result.SeatMap[0, 1], "Seat 1 should be empty.");
+            Assert.IsNull(result.SeatMap[0, 2], "Seat 2 should be empty.");
+        }
+
     }
 } 
