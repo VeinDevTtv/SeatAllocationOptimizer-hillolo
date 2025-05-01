@@ -136,7 +136,7 @@ namespace SeatAllocationOptimizer.Main
 
             (int row, int seat)? fallbackOption = null; // Store a potential non-preferred location
 
-            // Iterate through rows starting from startRow
+             // Iterate through rows starting from startRow
             for (int r = startRow; r < _planeRows; r++)
             {
                 // Determine starting seat for this row
@@ -173,7 +173,7 @@ namespace SeatAllocationOptimizer.Main
                             {
                                 // Preferred placement found, place the group
                                 PlaceGroup(group, r, s, seatsNeeded);
-                                // Update the global position for the *next* attempt
+                        // Update the global position for the *next* attempt
                                 UpdateGlobalPosition(ref startRow, ref startSeat, r, s + seatsNeeded);
                                 return true; // Group seated successfully in preferred spot
                             }
@@ -182,14 +182,14 @@ namespace SeatAllocationOptimizer.Main
                                 // Block is valid but doesn't satisfy window preference.
                                 // Store it as a fallback if we haven't found one yet.
                                 fallbackOption = (r, s);
-                            }
+                         }
                         }
                         // If family placement is invalid, blockAvailable becomes effectively false for this spot.
                     }
 
-                    // Move to the next possible starting seat in this row
-                    s++;
-                }
+                        // Move to the next possible starting seat in this row
+                        s++;
+                    }
                 // Finished checking row 'r'
             }
 
@@ -273,24 +273,24 @@ namespace SeatAllocationOptimizer.Main
                 {
                     // Check if this child has at least one adult neighbor *within the allocated block*.
                     bool adultNeighborFound = false;
-
+                    
                     // Check left neighbor (seat i-1 within the block)
                     if (i > 0)
                     {
                         Passenger leftNeighbor = members[i - 1];
                         if (leftNeighbor.IsAdult)
-                        {
-                            adultNeighborFound = true;
-                        }
+                    {
+                        adultNeighborFound = true;
                     }
-
+                    }
+                    
                     // Check right neighbor (seat i+1 within the block)
                     if (!adultNeighborFound && i < seatsNeeded - 1)
                     {
                         Passenger rightNeighbor = members[i + 1];
                         if (rightNeighbor.IsAdult)
-                        {
-                            adultNeighborFound = true;
+                    {
+                        adultNeighborFound = true;
                         }
                     }
 

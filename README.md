@@ -1,6 +1,8 @@
 # Maximizing Airline Revenue: A Systematic Approach
 > 3andek chi company dial tyarat? Bghiti tdir revenue? Weli m3ana f **Hilolo Airlines Simulator** — hada l’code dial Hilolo, li z3ma fakkar f seating optimization w nsaa l’user. W ana vein mrid f rasi hh
 
+![Airplane Seating Chart Meme](https://i.imgflip.com/4/7xp2vo.jpg)
+
 This application optimizes airline seating arrangements to maximize revenue while considering passenger preferences and family groupings.
 
 **Current Status & Known Limitations:**
